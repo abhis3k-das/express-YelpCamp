@@ -25,12 +25,10 @@ mongoose.connect(`mongodb://127.0.0.1:27017/${DB}`)
     .catch((err) => {
         console.log('Connection Failed.')
     })
-
-
-
 app.get('/', (req, res) => {
     res.send({ message: 'Hello' })
 })
+
 app.get('/campgrounds', async (req, res) => {
     try {
         const campgrounds = await Campground.find({});
@@ -67,7 +65,7 @@ app.put('/campgrounds/:id', async (req, res) => {
         location: req.body.location,
     }, { new: true })
     console.log(camp)
-    res.redirect('/campgrounds')
+    res.redirect(`/campgrounds/${req.body._id}`)
 
 })
 app.get('/campgrounds/:id', async (req, res) => {

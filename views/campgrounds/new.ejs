@@ -1,7 +1,7 @@
 <% layout('layout/boilerplate') %>
 <div class="row mb-3">
 	<h1 class="text-center">New Campground</h1>
-	<div class="col-6 offset-3">
+	<div class="col">
 		<form action="/campgrounds" method="POST">
 			<div class="mb-3">
 				<label class="form-label" for="title">Enter Title : </label>
@@ -31,7 +31,8 @@
 				<label class="form-label" for="description">Enter Descrpition : </label>
 				<textarea class="form-control" type="text" id="description" name="description" placeholder="description"></textarea>
 			</div>
-
-			<button class="btn btn-primary col-3 offset-9" type="submit">Add Campground</button>
+			<div class="mb-3 d-flex justify-content-end">
+				<button class="btn btn-primary" type="submit">Add Campground</button>
+			</div>
 		</form>
 	</div>
