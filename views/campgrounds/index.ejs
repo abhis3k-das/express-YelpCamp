@@ -1,26 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout('./layout/boilerplate') %>
 
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Campgrounds</title>
-</head>
+<h1>All Campgrounds</h1>
+<ul style="text-decoration: none;">
+	<% for(let i = 0 ; i < campgrounds.length ; i++) {%>
 
-<body>
-	<h1>All Campgrounds</h1>
-	<a href="/campgrounds/new">Create New</a>
-	<br>
-	<ul>
-		<% for(let i = 0 ; i < campgrounds.length ; i++) {%>
-		<li key='<%= campgrounds[i]._id %>'>
-			<a href='<%=`/campgrounds/${campgrounds[i]._id}`%>'>
-				<%= campgrounds[i].title %>
-			</a>
-		</li>
-		<% } %>
-	</ul>
-</body>
-
-</html>
+	<li key='<%= campgrounds[i]._id %>' style="list-style: none;">
+		<div class="card mb-3" style="max-width: 840px; max-height: 250px;">
+			<div class="row g-0">
+				<div class="col-md-4">
+					<img src="<%=campgrounds[i].image %>" class="img-fluid rounded-start" style="height:249px; width: 300px;" alt="...">
+				</div>
+				<div class="col-md-8">
+					<div class="card-body">
+						<h5 class="card-title"><%=campgrounds[i].title%></h5>
+						<p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Similique nam exercitationem sequi labore necessitatibus unde consectetur suscipit pariatur fugit sint. Molestiae, odit. Dignissimos, perferendis quae! Cum facere enim voluptate sequi.</p>
+						<p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+					</div>
+				</div>
+			</div>
+			<a href='<%=`/campgrounds/${campgrounds[i]._id}`%>' class="stretched-link"></a>
+		</div>
+	</li>
+	<% } %>
+</ul>

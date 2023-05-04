@@ -11,6 +11,9 @@ const campSchema = new mongoose.Schema({
     },
     location: {
         type: Object,
+    },
+    image: {
+        type: String,
     }
 })
 

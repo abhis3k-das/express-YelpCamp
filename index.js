@@ -1,13 +1,14 @@
 const express = require('express');
 const app = express();
 const path = require('path')
-const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
+const methodOverride = require('method-override')
 const mongoose = require('mongoose');
 const Campground = require('./model/campground')
 
 
 app.engine('ejs', ejsMate)
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
@@ -42,9 +43,10 @@ app.get('/campgrounds', async (req, res) => {
 app.post('/campgrounds', async (req, res) => {
     const newCamp = new Campground({
         title: req.body.title,
-        price: req.body.price,
+        price: parseFloat(req.body.price),
         description: req.body.description,
         location: req.body.location,
+        image: req.body.image
     })
     const response = await newCamp.save();
     console.log(response)
