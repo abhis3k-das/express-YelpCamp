@@ -1,0 +1,8 @@
+<% layout('./layout/boilerplate') %>
+<div class="alert alert-danger" role="alert">
+	<h4 class="alert-heading">Error! <%= status %></h4>
+	<% for(let i = 0 ; i < errorList.length ;i++){ %>
+	<p><%= errorList[i] %></p>
+	<% } %>
+	<hr>
+</div>

@@ -18,7 +18,7 @@ const campSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        required: true,
+        required: [true, "Please provide a valid url"]
     }
 })
 

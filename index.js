@@ -4,9 +4,10 @@ const path = require('path')
 const ejsMate = require('ejs-mate')
 const methodOverride = require('method-override')
 const mongoose = require('mongoose');
-const Campground = require('./model/campground')
-
-
+const Campground = require('./model/campground');
+const catchAsync = require('./utils/catchAsync');
+const ExpressError = require('./utils/ExpressError');
+const validateForm = require('./utils/joiSchema')
 app.engine('ejs', ejsMate)
 
 app.use(express.urlencoded({ extended: true }))
@@ -29,16 +30,13 @@ app.get('/', (req, res) => {
     res.send({ message: 'Hello' })
 })
 
-app.get('/campgrounds', async (req, res) => {
-    try {
-        const campgrounds = await Campground.find({});
-        res.render('campgrounds/index', { campgrounds })
-    } catch (err) {
-        res.send(err)
-    }
 
-})
-app.post('/campgrounds', async (req, res) => {
+
+app.get('/campgrounds', catchAsync(async (req, res) => {
+    const campgrounds = await Campground.find({});
+    res.render('campgrounds/index', { campgrounds })
+}))
+app.post('/campgrounds', validateForm, catchAsync(async (req, res, next) => {
     const newCamp = new Campground({
         title: req.body.title,
         price: parseFloat(req.body.price),
@@ -47,17 +45,16 @@ app.post('/campgrounds', async (req, res) => {
         image: req.body.image
     })
     const response = await newCamp.save();
-    console.log(response)
     res.redirect(`/campgrounds/${response._id}`)
-})
+}))
 app.get('/campgrounds/new', (req, res) => {
     res.render('campgrounds/new')
 })
-app.get('/campgrounds/:id/edit', async (req, res) => {
+app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
     const camp = await Campground.findById(req.params.id)
     res.render('campgrounds/edit', { camp })
-})
-app.put('/campgrounds/:id', async (req, res) => {
+}))
+app.put('/campgrounds/:id', validateForm, catchAsync(async (req, res) => {
     const camp = await Campground.findByIdAndUpdate(req.params.id, {
         title: req.body.title,
         price: req.body.price,
@@ -66,18 +63,43 @@ app.put('/campgrounds/:id', async (req, res) => {
     }, { new: true })
     console.log(camp)
     res.redirect(`/campgrounds/${req.body._id}`)
-
-})
-app.get('/campgrounds/:id', async (req, res) => {
+}))
+app.get('/campgrounds/:id', catchAsync(async (req, res) => {
     const { id } = req.params
     const camp = await Campground.findById(id);
+    if (!camp) {
+        throw new ExpressError("Id Not Found", 500)
+    }
     res.render('campgrounds/show', { camp });
-})
+}))
 app.delete('/campgrounds/:id', async (req, res) => {
     const camp = await Campground.findByIdAndDelete(req.params.id);
     console.log(camp)
     res.redirect('/campgrounds')
 })
+
+app.all('*', (req, res, next) => {
+    next(new ExpressError('Page Not Found', 404))
+})
+app.use((err, req, res, next) => {
+    let { message, status } = err
+    const errorList = []
+    if (status && status !== 400) {
+        const errorsKey = Object.keys(err.errors)
+        for (let each of errorsKey) {
+            errorList.push(err.errors[each].properties.message)
+        }
+    }
+    else {
+        status = 500
+        errorList.push(message)
+    }
+    res.render('errors', { errorList, status })
+
+    // res.send(err.message)
+    res.status(status).render(err)
+})
+
 app.listen(3000, () => {
     console.log('Connected to Port 3000')
 })

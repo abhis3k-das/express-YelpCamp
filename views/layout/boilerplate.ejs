@@ -38,9 +38,11 @@
 
 		const img = document.getElementById("image")
 		const thumbnail = document.getElementById("thumbnail");
-		img.addEventListener("change", () => {
-			thumbnail.setAttribute("src", img.value)
-		})
+		if (img) {
+			img.addEventListener("change", () => {
+				thumbnail.setAttribute("src", img.value)
+			})
+		}
 	</script>
 </body>
 
