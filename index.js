@@ -7,7 +7,8 @@ const mongoose = require('mongoose');
 const Campground = require('./model/campground');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
-const validateForm = require('./utils/joiSchema')
+const { validateForm, validateReview } = require('./utils/joiSchema');
+const Review = require('./model/review');
 app.engine('ejs', ejsMate)
 
 app.use(express.urlencoded({ extended: true }))
@@ -66,11 +67,39 @@ app.put('/campgrounds/:id', validateForm, catchAsync(async (req, res) => {
 }))
 app.get('/campgrounds/:id', catchAsync(async (req, res) => {
     const { id } = req.params
-    const camp = await Campground.findById(id);
+    const camp = await Campground.findById(id).populate('reviews');
+    console.log(camp)
     if (!camp) {
         throw new ExpressError("Id Not Found", 500)
     }
     res.render('campgrounds/show', { camp });
+}))
+
+app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const camp = await Campground.findById(id);
+    if (!camp) {
+        throw new ExpressError("Id Not Found", 500);
+    }
+    const review = new Review({
+        body: req.body.review,
+        rating: req.body.rating,
+    })
+    camp.reviews.push(review);
+    const response = await review.save();
+    console.log(response)
+    await camp.save();
+    res.redirect(`/campgrounds/${id}`)
+}))
+app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+    const camp = await Campground.findById(id);
+    if (!camp) {
+        throw new ExpressError("Id not found", 404);
+    }
+    await Review.findByIdAndDelete(reviewId)
+    await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } })
+    res.redirect(`/campgrounds/${id}`)
 }))
 app.delete('/campgrounds/:id', async (req, res) => {
     const camp = await Campground.findByIdAndDelete(req.params.id);
@@ -84,7 +113,8 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
     let { message, status } = err
     const errorList = []
-    if (status && status !== 400) {
+    if (status && status !== 400 && status !== 404) {
+        console.log("here")
         const errorsKey = Object.keys(err.errors)
         for (let each of errorsKey) {
             errorList.push(err.errors[each].properties.message)
@@ -95,9 +125,6 @@ app.use((err, req, res, next) => {
         errorList.push(message)
     }
     res.render('errors', { errorList, status })
-
-    // res.send(err.message)
-    res.status(status).render(err)
 })
 
 app.listen(3000, () => {
