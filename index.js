@@ -5,10 +5,18 @@ const ejsMate = require('ejs-mate')
 const methodOverride = require('method-override')
 const mongoose = require('mongoose');
 const ExpressError = require('./utils/ExpressError');
-const campRoutes = require('./routes/campgrounds');
-const reviewRoutes = require('./routes/review');
+
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const localStrategy = require('passport-local');
+const User = require('./model/user');
+
+
+const userRoutes = require('./routes/user')
+const campRoutes = require('./routes/campgrounds');
+const reviewRoutes = require('./routes/review');
+
 
 app.engine('ejs', ejsMate)
 
@@ -26,7 +34,11 @@ app.use(session({
     }
 }))
 app.use(flash())
-
+app.use(passport.initialize());
+app.use(passport.session())
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
@@ -47,9 +59,10 @@ app.use((req, res, next) => {
     next();
 })
 
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
     res.send({ message: 'Hello' })
 })
+app.use('/', userRoutes);
 app.use('/campgrounds', campRoutes);
 app.use('/campgrounds/:id/reviews', reviewRoutes);
 
