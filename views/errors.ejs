@@ -1,8 +1,10 @@
 <% layout('./layout/boilerplate') %>
-<div class="alert alert-danger" role="alert">
-	<h4 class="alert-heading">Error! <%= status %></h4>
-	<% for(let i = 0 ; i < errorList.length ;i++){ %>
-	<p><%= errorList[i] %></p>
-	<% } %>
-	<hr>
+<div class="d-flex justify-content-center">
+	<div class="alert alert-danger" role="alert" style="max-width: 500px;">
+		<h4 class=" alert-heading">Error! <%= status %></h4>
+		<% for(let i = 0 ; i < errorList.length ;i++){ %>
+		<p><%= errorList[i] %></p>
+		<% } %>
+		<hr>
+	</div>
 </div>

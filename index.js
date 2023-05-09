@@ -7,12 +7,26 @@ const mongoose = require('mongoose');
 const ExpressError = require('./utils/ExpressError');
 const campRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/review');
+const session = require('express-session');
+const flash = require('connect-flash');
+
 app.engine('ejs', ejsMate)
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(methodOverride('_method'))
+app.use(session({
+    secret: 'thisShouldBeInEnv',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        httpOnly: true,
+    }
+}))
+app.use(flash())
+
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
@@ -25,11 +39,17 @@ mongoose.connect(`mongodb://127.0.0.1:27017/${DB}`)
     .catch((err) => {
         console.log('Connection Failed.')
     })
+
+
+app.use((req, res, next) => {
+    res.locals.message = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+})
+
 app.get('/', (req, res) => {
     res.send({ message: 'Hello' })
 })
-
-
 app.use('/campgrounds', campRoutes);
 app.use('/campgrounds/:id/reviews', reviewRoutes);
 
