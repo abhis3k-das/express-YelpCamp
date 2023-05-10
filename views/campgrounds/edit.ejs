@@ -2,7 +2,7 @@
 <div class="row mb-3">
 	<h1 class="text-center">Edit Campground</h1>
 	<div class="col d-flex justify-content-center">
-		<form action="/campgrounds" method="POST" class="validate-form" style="width: 540px;" novalidate>
+		<form action='/campgrounds/<%=camp._id%>?_method=PUT' method="POST" class="validate-form" style="width: 540px;" novalidate>
 			<div class="mb-3">
 				<label class="form-label" for="title">Enter Title : </label>
 				<input class="form-control" type="text" id="title" name="title" placeholder="text" value='<%=camp.title%>' required>

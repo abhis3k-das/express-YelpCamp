@@ -11,6 +11,7 @@
 				<li class="list-group-item text-muted"><%= camp.location %></li>
 				<li class="list-group-item fw-bold text-end">$<%= (camp.price).toFixed(2) %> / night</li>
 			</ul>
+			<% if(user && camp.author.equals(user._id)) {%>
 			<div class="card-body">
 				<div class="d-flex">
 					<a class="btn btn-primary me-3" href='/campgrounds/<%=camp._id%>/edit' class="card-link">Edit</a>
@@ -19,12 +20,17 @@
 					</form>
 				</div>
 			</div>
+			<% } %>
 			<div class="card-footer text-muted">
-				2 days ago
+				<div class="d-flex justify-content-between">
+					<p>2 days ago</p>
+					<p>-<%=camp.author.username[0].toUpperCase()+camp.author.username.slice(1)  %></p>
+				</div>
 			</div>
 		</div>
 	</div>
 	<div class="col-4">
+		<% if(user){ %>
 		<h2>Leave a Review : </h2>
 		<form class="validate-form mb-3" action="/campgrounds/<%=camp._id%>/reviews" method="POST" novalidate>
 			<div class="mb-3">
@@ -43,20 +49,27 @@
 			</div>
 			<button type="submit" class="btn btn-success">Submit</button>
 		</form>
+		<% }else{ %>
+		<% if(camp.reviews.length === 0){ %>
+		<h2>No reviews Added.</h2>
+		<% } %>
+		<p><a href="/login">Login</a> to add a review.</p>
+		<% } %>
 		<% if(camp.reviews.length>0){ %>
 		<% camp.reviews.map((each)=>{ %>
 		<div class="card mb-2">
 			<div class="card-body d-flex justify-content-between">
 				<div style="max-height: 100px; overflow-y: auto;">
-					<h5 class="card-title">Rating: <%= each.rating %></h5>
+					<h5 class="card-title"><%= each.author.username[0].toUpperCase()+each.author.username.slice(1) %> gave a rating of <%= each.rating %></h5>
 					<p class="card-text"><%= each.body %></p>
 				</div>
-
+				<%if( user && (each.author.equals(user._id) || camp.author.equals(user._id))){ %>
 				<div>
 					<form action="/campgrounds/<%= camp._id %>/reviews/<%= each._id %>?_method=DELETE" method="POST">
 						<button class="btn btn-sm btn-danger">Delete</button>
 					</form>
 				</div>
+				<% } %>
 			</div>
 		</div>
 		<% }) %>

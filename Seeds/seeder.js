@@ -44,6 +44,7 @@ async function createDb() {
         })
         let newCamp = {
             title: names.descriptors[dIndex] + ' ' + names.places[pIndex],
+            author: "645b07b1abed3f8f558cd10a",
             price: Math.floor(Math.random() * 300 + 100),
             description: `Its in ${city.state} , with a population of ${city.population} and ranks ${city.rank}.`,
             location: city.city,
@@ -60,5 +61,5 @@ async function createDb() {
             console.log(err)
         })
 }
-// clearDb()
+clearDb()
 createDb();

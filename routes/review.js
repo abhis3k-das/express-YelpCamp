@@ -5,8 +5,10 @@ const catchAsync = require('../utils/catchAsync');
 const Review = require('../model/review');
 const Campground = require('../model/campground');
 const ExpressError = require('../utils/ExpressError');
+const User = require('../model/user');
 
-router.post('', validateReview, catchAsync(async (req, res) => {
+
+router.post('', User.loginMiddleware, validateReview, catchAsync(async (req, res) => {
     const { id } = req.params;
     const camp = await Campground.findById(id);
     if (!camp) {
@@ -15,6 +17,7 @@ router.post('', validateReview, catchAsync(async (req, res) => {
     const review = new Review({
         body: req.body.review,
         rating: req.body.rating,
+        author: req.user._id,
     })
     camp.reviews.push(review);
     await review.save();
@@ -22,11 +25,15 @@ router.post('', validateReview, catchAsync(async (req, res) => {
     req.flash('success', 'Review added.')
     res.redirect(`/campgrounds/${id}`)
 }))
-router.delete('/:reviewId', catchAsync(async (req, res) => {
+router.delete('/:reviewId', User.loginMiddleware, catchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     const camp = await Campground.findById(id);
     if (!camp) {
         throw new ExpressError("Id not found", 404);
+    }
+    if (!req.user._id.equals(reviewId) && camp.author.equals(req.user._id)) {
+        req.flash('error', 'Permission denied.')
+        return res.redirect(`/campgrounds/${id}`)
     }
     await Review.findByIdAndDelete(reviewId)
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } })

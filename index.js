@@ -56,6 +56,9 @@ mongoose.connect(`mongodb://127.0.0.1:27017/${DB}`)
 app.use((req, res, next) => {
     res.locals.message = req.flash('success');
     res.locals.error = req.flash('error');
+    res.locals.isLoggedIn = req.isAuthenticated();
+    res.locals.user = req.user
+    console.log(res.locals.user)
     next();
 })
 

@@ -7,6 +7,14 @@ const userSchema = new mongoose.Schema({
         unique: true,
     },
 })
+userSchema.statics.loginMiddleware = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        req.session.returnTo = req.originalUrl;
+        req.flash('error', 'Must login to proceed')
+        return res.redirect('/login')
+    }
+    next();
+}
 userSchema.plugin(passportLocalMongoose);
 
 const User = mongoose.model('User', userSchema);

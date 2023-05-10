@@ -21,6 +21,10 @@ const campSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please provide a valid url"]
     },
+    author: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+    },
     reviews: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Review',
