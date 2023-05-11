@@ -16,13 +16,17 @@ const isAuthor = async (req, res, next) => {
     next();
 }
 
+router.route('')
+    .get(catchAsync(campgrounds.index))
+    .post(User.loginMiddleware, validateForm, catchAsync(campgrounds.createNewCampground));
 
-router.get('', catchAsync(campgrounds.index))
-router.post('', User.loginMiddleware, validateForm, catchAsync(campgrounds.createNewCampground));
+
 router.get('/new', User.loginMiddleware, campgrounds.renderNewForm);
-router.get('/:id/edit', User.loginMiddleware, isAuthor, catchAsync(campgrounds.renderEditForm))
-router.put('/:id', User.loginMiddleware, isAuthor, validateForm, catchAsync(campgrounds.editCampground))
-router.get('/:id', catchAsync(campgrounds.renderCampground))
-router.delete('/:id', User.loginMiddleware, isAuthor, campgrounds.deleteCampground)
 
+router.route('/:id')
+    .get(catchAsync(campgrounds.renderCampground))
+    .put(User.loginMiddleware, isAuthor, validateForm, catchAsync(campgrounds.editCampground))
+    .delete(User.loginMiddleware, isAuthor, campgrounds.deleteCampground)
+
+router.get('/:id/edit', User.loginMiddleware, isAuthor, catchAsync(campgrounds.renderEditForm))
 module.exports = router;

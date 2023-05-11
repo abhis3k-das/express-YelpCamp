@@ -1,5 +1,4 @@
 const User = require('../model/user');
-const passport = require('passport');
 module.exports.index = (req, res) => {
     res.render('users/register')
 }
