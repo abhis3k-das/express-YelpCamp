@@ -2,7 +2,7 @@
 <div class="row mb-3">
 	<h1 class="text-center">Edit Campground</h1>
 	<div class="col d-flex justify-content-center">
-		<form action='/campgrounds/<%=camp._id%>?_method=PUT' method="POST" class="validate-form" style="width: 540px;" novalidate>
+		<form action='/campgrounds/<%=camp._id%>?_method=PUT' method="POST" class="validate-form" style="width: 540px;" novalidate enctype="multipart/form-data">
 			<div class="mb-3">
 				<label class="form-label" for="title">Enter Title : </label>
 				<input class="form-control" type="text" id="title" name="title" placeholder="text" value='<%=camp.title%>' required>
@@ -27,9 +27,18 @@
 				</div>
 			</div>
 			<div class="mb-3">
-				<label class="form-label" for="image">Enter Image Url :</label>
-				<input class="form-control" type="text" id="image" name="image" placeholder="image url" value='<%=camp.image%>'>
-				<img id="thumbnail" class="img-thumbnail" style="height: 100px; width: 150px;" src="<%=camp.image%>" required>
+				<label class="form-label" for="image">Add Image(s)</label>
+				<input class="form-control" type="file" name="image" id="imagePicker" multiple>
+				<div id="thumbnails">
+					<% camp.image.forEach((each,ind)=>{ %>
+					<div class="form-check form-check-inline">
+						<label class="form-check-label " for="<%= ind %>">
+							<img id="thumbnail" class="img-thumbnail mt-3" style="height: 120px; width: 120px;" src="<%=each.url %>" alt="https://static.thenounproject.com/png/3840068-200.png">
+						</label>
+						<input class="form-check-input mt-3" type="checkbox" id=<%=ind %> value=<%=each.filename%> name="options[]">
+					</div>
+					<% }) %>
+				</div>
 				<div class="valid-feedback">
 					Looks Good!
 				</div>

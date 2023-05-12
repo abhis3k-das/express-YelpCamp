@@ -11,9 +11,9 @@ const names = require('./names');
 const mongoose = require('mongoose')
 const DB = 'yelpCampWeb'
 const COUNT = 20;
+// require('dotenv').config();
 
-require('dotenv').config();
-
+console.log(process.env.MAPBOX_TOKKEN)
 mongoose.connect(`mongodb://127.0.0.1:27017/${DB}`)
     .then(() => {
         console.log('Connected to ' + DB)
@@ -21,45 +21,49 @@ mongoose.connect(`mongodb://127.0.0.1:27017/${DB}`)
     .catch((err) => {
         console.log('Connection Failed.')
     })
-async function clearDb() {
-    const response = await Campground.deleteMany({});
-    console.log(response);
-}
 
-const unsplash = require('unsplash-js')
-const api = unsplash.createApi({
-    accessKey: process.env.UNSPLASH_KEY
-});
+// const unsplash = require('unsplash-js')
+// const api = unsplash.createApi({
+//     accessKey: process.env.UNSPLASH_KEY
+// });
 
 async function createDb() {
+    await Campground.deleteMany({});
     const campList = [];
-    for (let i = 0; i < 19; i++) {
+    for (let i = 0; i < 200; i++) {
         let randomIndex = Math.floor(Math.random() * cities.length)
         let dIndex = Math.floor(Math.random() * names.descriptors.length);
         let pIndex = Math.floor(Math.random() * names.places.length);
         let city = cities[randomIndex]
-        let image = await api.photos.getRandom({
-            collectionIds: ['3867746', '11710947'],
-            count: 1,
-        })
+        // let image = await api.photos.getRandom({
+        //     collectionIds: ['3867746', '11710947'],
+        //     count: 1,
+        // })
+        let image = [
+            {
+                url: 'https://res.cloudinary.com/dyiasu9hz/image/upload/v1683775750/yelpCampWeb/lknlteujciwc6pzphdbn.jpg',
+                filename: 'yelpCampWeb/lknlteujciwc6pzphdbn',
+            },
+            {
+                url: 'https://res.cloudinary.com/dyiasu9hz/image/upload/v1683775750/yelpCampWeb/lej65hrck9zbvadf2e96.jpg',
+                filename: 'yelpCampWeb/lej65hrck9zbvadf2e96',
+            }
+        ]
         let newCamp = {
             title: names.descriptors[dIndex] + ' ' + names.places[pIndex],
             author: "645b07b1abed3f8f558cd10a",
             price: Math.floor(Math.random() * 300 + 100),
             description: `Its in ${city.state} , with a population of ${city.population} and ranks ${city.rank}.`,
+            geometry: { type: "Point", coordinates: [city.longitude, city.latitude] },
             location: city.city,
-            image: image.response[0].urls.regular,
+            // image: image.response[0].urls.regular,
+            image: image
         }
         campList.push(newCamp);
     }
-    console.log(campList)
-    await Campground.insertMany(campList)
-        .then((res) => {
-            mongoose.connection.close();
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+    // console.log(campList)
+    const response = await Campground.insertMany(campList)
+    console.log(response)
+
 }
-clearDb()
 createDb();

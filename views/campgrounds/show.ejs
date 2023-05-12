@@ -1,9 +1,30 @@
 <% layout('layout/boilerplate') %>
 <link rel="stylesheet" href="/stylesheets/stars.css">
+
 <div class="row my-5">
 	<div class="col-4 offset-2">
+
 		<div class="card mb-5" style="max-width: 500px;">
-			<img src="<%= camp.image %>" class="card-img-top" style="height: 300px;" alt="...">
+			<div id="carouselExample" class="carousel slide">
+				<div class="carousel-inner">
+					<% camp.image.forEach((each,i)=>{%>
+					<% console.log(each) %>
+					<div class="carousel-item <%= i === 0 ?"active":'' %>" style="width: 100%;">
+						<img src=<%= each.url %> class="d-block" style="width:100%; height:310px" alt="">
+					</div>
+					<% }) %>
+				</div>
+				<% if(camp.image.length>1) {%>
+				<button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Previous</span>
+				</button>
+				<button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Next</span>
+				</button>
+				<% } %>
+			</div>
 			<div class="card-body">
 				<h5 class="card-title"><%=camp.title %></h5>
 				<p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam rerum, eaque doloremque dolor quasi blanditiis eligendi molestiae rem voluptatem cupiditate dolore quod dolorum voluptate fugit placeat repudiandae sed qui tempore!</p>
@@ -15,7 +36,7 @@
 			<% if(user && camp.author.equals(user._id)) {%>
 			<div class="card-body">
 				<div class="d-flex">
-					<a class="btn btn-primary me-3" href='/campgrounds/<%=camp._id%>/edit' class="card-link">Edit</a>
+					<a class="btn btn-primary me-3" href=' /campgrounds/<%=camp._id%>/edit' class="card-link">Edit</a>
 					<form action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
 						<button class="btn btn-danger" type="submit">Delete</button>
 					</form>
@@ -31,6 +52,7 @@
 		</div>
 	</div>
 	<div class="col-4">
+		<div id="map" style='height: 300px;'></div>
 		<% if(user){ %>
 		<h2>Leave a Review : </h2>
 		<form class="validate-form mb-3" action="/campgrounds/<%=camp._id%>/reviews" method="POST" novalidate>
@@ -90,3 +112,8 @@
 		<% } %>
 	</div>
 </div>
+<script>
+	const mapToken = '<%-process.env.MAPBOX_TOKEN%>'
+	const camp = <%-JSON.stringify(camp)%>
+</script>
+<script src="/javascripts/map.js"></script>

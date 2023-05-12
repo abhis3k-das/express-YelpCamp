@@ -2,7 +2,7 @@
 <div class="row mb-3">
 	<h1 class="text-center">New Campground</h1>
 	<div class="col d-flex justify-content-center">
-		<form action="/campgrounds" method="POST" novalidate class="validate-form" style="width: 540px;">
+		<form action="/campgrounds" method="POST" novalidate class="validate-form" style="width: 540px;" enctype="multipart/form-data">
 			<div class="mb-3">
 				<label class="form-label" for="title">Enter Title : </label>
 				<input class="form-control" type="text" id="title" name="title" placeholder="title" required>
@@ -27,9 +27,9 @@
 				</div>
 			</div>
 			<div class="mb-3">
-				<label class="form-label" for="image">Enter Image Url :</label>
-				<input class="form-control" type="text" id="image" name="image" placeholder="image url" required>
-				<img id="thumbnail" class="img-thumbnail mt-3" style="height: 120px; width: 120px;" src="https://static.thenounproject.com/png/3840068-200.png" alt="Need url" required>
+				<label class="form-label" for="image">Add Image(s)</label>
+				<input class="form-control" type="file" name="image" id="imagePicker" required multiple>
+				<img id="thumbnail" class="img-thumbnail mt-3" style="height: 120px; width: 120px;" src="https://static.thenounproject.com/png/3840068-200.png" alt="Need url">
 				<div class="valid-feedback">
 					Looks Good!
 				</div>

@@ -4,9 +4,10 @@ module.exports.validateForm = (req, res, next) => {
     const campgroundSchema = Joi.object({
         title: Joi.string().required(),
         price: Joi.number().required(),
-        image: Joi.string().required(),
+        image: Joi.string(),
         description: Joi.string().required(),
         location: Joi.string().required(),
+        options: Joi.array(),
     })
     const { error } = campgroundSchema.validate(req.body, { abortEarly: false })
     if (error) {

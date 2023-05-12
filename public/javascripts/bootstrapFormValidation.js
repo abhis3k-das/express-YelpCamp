@@ -1,6 +1,6 @@
 (() => {
     'use strict'
-
+    bsCustomFileInput.init()
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     const forms = document.querySelectorAll('.validate-form')
 
@@ -17,10 +17,3 @@
     })
 })()
 
-const img = document.getElementById("image")
-const thumbnail = document.getElementById("thumbnail");
-if (img) {
-    img.addEventListener("change", () => {
-        thumbnail.setAttribute("src", img.value)
-    })
-}
