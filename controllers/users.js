@@ -22,6 +22,7 @@ module.exports.createNewUser = async (req, res, next) => {
 }
 
 module.exports.renderLoginPage = (req, res) => {
+
     res.render('users/login');
 }
 

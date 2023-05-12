@@ -41,12 +41,14 @@ async function createDb() {
         // })
         let image = [
             {
-                url: 'https://res.cloudinary.com/dyiasu9hz/image/upload/v1683775750/yelpCampWeb/lknlteujciwc6pzphdbn.jpg',
-                filename: 'yelpCampWeb/lknlteujciwc6pzphdbn',
+                url: "https://res.cloudinary.com/dyiasu9hz/image/upload/v1683870914/yelpCampWeb/nwoeazhh82xzi8gcuzur.jpg",
+                filename: "yelpCampWeb/nwoeazhh82xzi8gcuzur",
+                _id: "645dd4c2784d016d5051e146"
             },
             {
-                url: 'https://res.cloudinary.com/dyiasu9hz/image/upload/v1683775750/yelpCampWeb/lej65hrck9zbvadf2e96.jpg',
-                filename: 'yelpCampWeb/lej65hrck9zbvadf2e96',
+                url: "https://res.cloudinary.com/dyiasu9hz/image/upload/v1683870915/yelpCampWeb/kw1gfmihvekewnbzgjjx.jpg",
+                filename: "yelpCampWeb/kw1gfmihvekewnbzgjjx",
+                _id: "645dd4c2784d016d5051e147"
             }
         ]
         let newCamp = {

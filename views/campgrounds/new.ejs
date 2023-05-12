@@ -1,5 +1,5 @@
 <% layout('layout/boilerplate') %>
-<div class="row mb-3">
+<div class="row mb-3 mt-5">
 	<h1 class="text-center">New Campground</h1>
 	<div class="col d-flex justify-content-center">
 		<form action="/campgrounds" method="POST" novalidate class="validate-form" style="width: 540px;" enctype="multipart/form-data">
@@ -28,8 +28,7 @@
 			</div>
 			<div class="mb-3">
 				<label class="form-label" for="image">Add Image(s)</label>
-				<input class="form-control" type="file" name="image" id="imagePicker" required multiple>
-				<img id="thumbnail" class="img-thumbnail mt-3" style="height: 120px; width: 120px;" src="https://static.thenounproject.com/png/3840068-200.png" alt="Need url">
+				<input class="form-control" type="file" name="image" id="imagePicker" multiple>
 				<div class="valid-feedback">
 					Looks Good!
 				</div>

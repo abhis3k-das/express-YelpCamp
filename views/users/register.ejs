@@ -1,42 +1,44 @@
 <% layout('layout/boilerplate') %>
-<div class="row mb-3">
-	<h1 class="text-center">Register</h1>
-	<div class="col d-flex justify-content-center">
-
-		<form action="/register" method="POST" class="validate-form" style="width: 540px;" novalidate>
-			<div class="mb-3">
-				<label class="form-label" for="username">Enter username : </label>
-				<input class="form-control" type="text" id="username" name="username" placeholder="username" required>
-				<div class="valid-feedback">
-					Looks Good!
-				</div>
-				<div class="invalid-feedback">
-					Please enter a username.
-				</div>
+<div class="row mb-3 mt-5 ">
+	<div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+		<div class="card shadow">
+			<img crossorigin="anonymous" src="https://res.cloudinary.com/dyiasu9hz/image/upload/v1683870914/yelpCampWeb/nwoeazhh82xzi8gcuzur.jpg" alt="Not found">
+			<div class="card-body">
+				<h4 class="card-title">Register</h4>
+				<form action="/register" method="POST" class="validate-form w-100 px-4 my-3" style="width: 540px;" novalidate>
+					<div class="mb-3">
+						<label class="form-label" for="username">Enter username : </label>
+						<input class="form-control" type="text" id="username" name="username" placeholder="username" required>
+						<div class="valid-feedback">
+							Looks Good!
+						</div>
+						<div class="invalid-feedback">
+							Please enter a username.
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="email">Enter email : </label>
+						<input class="form-control" type="email" id="email" name="email" placeholder="email" required>
+						<div class="valid-feedback">
+							Looks Good!
+						</div>
+						<div class="invalid-feedback">
+							Please enter a email.
+						</div>
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="password">Enter password : </label>
+						<input class="form-control" type="password" id="password" name="password" placeholder="password" required>
+						<div class="valid-feedback">
+							Looks Good!
+						</div>
+						<div class="invalid-feedback">
+							Please enter a password.
+						</div>
+					</div>
+					<button class="btn btn-success w-100" type="submit">Register</button>
+				</form>
 			</div>
-			<div class="mb-3">
-				<label class="form-label" for="email">Enter email : </label>
-				<input class="form-control" type="email" id="email" name="email" placeholder="email" required>
-				<div class="valid-feedback">
-					Looks Good!
-				</div>
-				<div class="invalid-feedback">
-					Please enter a email.
-				</div>
-			</div>
-			<div class="mb-3">
-				<label class="form-label" for="password">Enter password : </label>
-				<input class="form-control" type="password" id="password" name="password" placeholder="password" required>
-				<div class="valid-feedback">
-					Looks Good!
-				</div>
-				<div class="invalid-feedback">
-					Please enter a password.
-				</div>
-			</div>
-			<div class="mb-3 d-flex justify-content-end">
-				<button class="btn btn-success" type="submit">Register</button>
-			</div>
-		</form>
+		</div>
 	</div>
 </div>

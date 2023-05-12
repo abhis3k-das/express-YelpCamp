@@ -1,8 +1,8 @@
 <% layout('layout/boilerplate') %>
-<div class="row mb-3">
+<div class="row mb-3 mt-5">
 	<h1 class="text-center">Edit Campground</h1>
 	<div class="col d-flex justify-content-center">
-		<form action='/campgrounds/<%=camp._id%>?_method=PUT' method="POST" class="validate-form" style="width: 540px;" novalidate enctype="multipart/form-data">
+		<form crossorigin="anonymous" action='/campgrounds/<%=camp._id%>?_method=PUT' method="POST" class="validate-form" style="width: 540px;" novalidate enctype="multipart/form-data">
 			<div class="mb-3">
 				<label class="form-label" for="title">Enter Title : </label>
 				<input class="form-control" type="text" id="title" name="title" placeholder="text" value='<%=camp.title%>' required>
@@ -29,11 +29,12 @@
 			<div class="mb-3">
 				<label class="form-label" for="image">Add Image(s)</label>
 				<input class="form-control" type="file" name="image" id="imagePicker" multiple>
+				<p class="text-muted p-0 m-0 g-0">Select to delete.</p>
 				<div id="thumbnails">
 					<% camp.image.forEach((each,ind)=>{ %>
 					<div class="form-check form-check-inline">
 						<label class="form-check-label " for="<%= ind %>">
-							<img id="thumbnail" class="img-thumbnail mt-3" style="height: 120px; width: 120px;" src="<%=each.url %>" alt="https://static.thenounproject.com/png/3840068-200.png">
+							<img crossorigin="anonymous" id="thumbnail" class="img-thumbnail mt-3" style="height: 120px; width: 120px;" src="<%=each.url %>" alt="https://static.thenounproject.com/png/3840068-200.png">
 						</label>
 						<input class="form-check-input mt-3" type="checkbox" id=<%=ind %> value=<%=each.filename%> name="options[]">
 					</div>
