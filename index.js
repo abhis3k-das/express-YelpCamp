@@ -9,6 +9,17 @@ const methodOverride = require('method-override')
 const mongoose = require('mongoose');
 const ExpressError = require('./utils/ExpressError');
 
+const url = process.env.MONGO_ATLAS || `mongodb://127.0.0.1:27017/yelpCampWeb`;
+const secret = process.env.SECRET || 'thisShouldBeInEnv';
+mongoose.connect(url)
+    .then(() => {
+        console.log('Connected to DB')
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+
+
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
@@ -16,6 +27,7 @@ const localStrategy = require('passport-local');
 const User = require('./model/user');
 const mongoSanitize = require('express-mongo-sanitize')
 const helmet = require('helmet');
+const MongoDBStore = require('connect-mongo')(session);
 
 const userRoutes = require('./routes/user')
 const campRoutes = require('./routes/campgrounds');
@@ -27,9 +39,20 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(methodOverride('_method'))
+const store = new MongoDBStore({
+    url: url,
+    secret: secret,
+    touchAfter: 24 * 60 * 60, //seconds
+
+})
+
+store.on("error", function (e) {
+    console.log("session store error")
+})
 app.use(session({
+    store: store,
     name: 'my_Session',
-    secret: 'thisShouldBeInEnv',
+    secret: secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -95,14 +118,6 @@ passport.deserializeUser(User.deserializeUser());
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
-const DB = 'yelpCampWeb'
-mongoose.connect(`mongodb://127.0.0.1:27017/${DB}`)
-    .then(() => {
-        console.log('Connected to ' + DB)
-    })
-    .catch((err) => {
-        console.log('Connection Failed.')
-    })
 
 
 app.use((req, res, next) => {
@@ -144,3 +159,4 @@ app.use((err, req, res, next) => {
 app.listen(3000, () => {
     console.log('Connected to Port 3000')
 })
+
